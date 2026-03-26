@@ -153,12 +153,11 @@ const interestForm = document.getElementById("interestForm");
 const successMessage = document.querySelector(".interest-success");
 
 if (interestForm && successMessage) {
-  interestForm.addEventListener("submit", (e) => {
-    const submitBtn = interestForm.querySelector(
-      '.interest-panel.active button[type="submit"]'
-    );
+  interestForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-    successMessage.textContent = "Submitting...";
+    const activePanel = interestForm.querySelector(".interest-panel.active");
+    const submitBtn = activePanel?.querySelector('button[type="submit"]');
 
     if (submitBtn) {
       submitBtn.disabled = true;
@@ -166,59 +165,101 @@ if (interestForm && successMessage) {
       submitBtn.textContent = "Submitting...";
     }
 
-    // Local preview only.
-    // When using file:// it won't submit anywhere, so we fake success.
-    if (window.location.protocol === "file:") {
-      e.preventDefault();
+    successMessage.textContent = "Submitting...";
 
-      setTimeout(() => {
-        successMessage.textContent = "Thank you. We will contact you soon.";
+    const formType = formTypeInput ? formTypeInput.value : "general";
 
-        const activeType = formTypeInput ? formTypeInput.value : "general";
+    let formData = {
+      formType,
+      name: "",
+      email: "",
+      phone: "",
+      country: "",
+      message: "",
+    };
+
+    if (formType === "general") {
+      formData.name =
+        `${interestForm.querySelector('[name="general_first_name"]')?.value || ""} ${interestForm.querySelector('[name="general_last_name"]')?.value || ""}`.trim();
+      formData.email =
+        interestForm.querySelector('[name="general_email"]')?.value.trim() || "";
+      formData.phone =
+        interestForm.querySelector('[name="general_phone"]')?.value.trim() || "";
+      formData.country =
+        interestForm.querySelector('[name="general_country"]')?.value.trim() || "";
+      formData.message =
+        interestForm.querySelector('[name="general_message"]')?.value.trim() || "";
+    }
+
+    if (formType === "investor") {
+      formData.name =
+        `${interestForm.querySelector('[name="investor_first_name"]')?.value || ""} ${interestForm.querySelector('[name="investor_last_name"]')?.value || ""}`.trim();
+      formData.email =
+        interestForm.querySelector('[name="investor_email"]')?.value.trim() || "";
+      formData.phone =
+        interestForm.querySelector('[name="investor_phone"]')?.value.trim() || "";
+      formData.country =
+        interestForm.querySelector('[name="investor_country"]')?.value.trim() || "";
+      formData.message =
+        interestForm.querySelector('[name="investor_interest"]')?.value.trim() || "Investor interest form submission";
+    }
+
+    if (formType === "business") {
+      formData.name =
+        interestForm.querySelector('[name="business_contact_name"]')?.value.trim() || "";
+      formData.email =
+        interestForm.querySelector('[name="business_email"]')?.value.trim() || "";
+      formData.phone =
+        interestForm.querySelector('[name="business_phone"]')?.value.trim() || "";
+      formData.country =
+        interestForm.querySelector('[name="business_country"]')?.value.trim() || "";
+      formData.message =
+        interestForm.querySelector('[name="business_message"]')?.value.trim() || "Business enquiry form submission";
+    }
+
+    if (formType === "q4_updates") {
+      formData.name =
+        interestForm.querySelector('[name="updates_name"]')?.value.trim() || "Updates subscriber";
+      formData.email =
+        interestForm.querySelector('[name="updates_email"]')?.value.trim() || "";
+      formData.phone =
+        interestForm.querySelector('[name="updates_phone"]')?.value.trim() || "";
+      formData.country =
+        interestForm.querySelector('[name="updates_country"]')?.value.trim() || "";
+      formData.message = "Q4 updates subscription";
+    }
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(formData)
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        successMessage.textContent = "Thank you. Your form has been submitted successfully.";
         interestForm.reset();
 
-        // Restore selected tab after reset
-        interestTabs.forEach((tab) => {
-          const panelId = tab.getAttribute("data-panel");
-          const type = panelMap[panelId];
-
-          if (type === activeType) {
-            tab.classList.add("active");
-            tab.setAttribute("aria-selected", "true");
-          } else {
-            tab.classList.remove("active");
-            tab.setAttribute("aria-selected", "false");
-          }
-        });
-
         interestPanels.forEach((panel) => {
-          panel.classList.remove("active");
+          const steps = panel.querySelectorAll(".multi-step-form");
+          steps.forEach((step, index) => {
+            step.classList.toggle("active-step", index === 0);
+          });
         });
-
-        const panelIdToShow =
-          activeType === "general"
-            ? "generalPanel"
-            : activeType === "investor"
-            ? "investorPanel"
-            : activeType === "business"
-            ? "businessPanel"
-            : "updatesPanel";
-
-        const panelToShow = document.getElementById(panelIdToShow);
-        if (panelToShow) {
-          panelToShow.classList.add("active");
-        }
-
-        if (formTypeInput) {
-          formTypeInput.value = activeType;
-        }
-
-        if (submitBtn) {
-          submitBtn.disabled = false;
-          submitBtn.textContent =
-            submitBtn.dataset.originalText || "Submit";
-        }
-      }, 1200);
+      } else {
+        successMessage.textContent = result.message || "Something went wrong. Please try again.";
+      }
+    } catch (error) {
+      successMessage.textContent = "Something went wrong. Please try again.";
+    } finally {
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = submitBtn.dataset.originalText || "Submit";
+      }
     }
   });
 }
@@ -242,55 +283,3 @@ document.querySelectorAll(".interest-panel").forEach((panel) => {
     });
   }
 });
-const contactForm = document.getElementById("contactForm");
-const formStatus = document.getElementById("formStatus");
-
-if (contactForm) {
-  contactForm.addEventListener("submit", async function (e) {
-    e.preventDefault();
-
-    const submitBtn = contactForm.querySelector('button[type="submit"]');
-    if (submitBtn) {
-      submitBtn.disabled = true;
-      submitBtn.textContent = "Sending...";
-    }
-
-    const formData = {
-      name: contactForm.querySelector('[name="name"]').value.trim(),
-      email: contactForm.querySelector('[name="email"]').value.trim(),
-      message: contactForm.querySelector('[name="message"]').value.trim(),
-    };
-
-    try {
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-
-      const result = await response.json();
-
-      if (response.ok) {
-        if (formStatus) {
-          formStatus.textContent = "Message sent successfully.";
-        }
-        contactForm.reset();
-      } else {
-        if (formStatus) {
-          formStatus.textContent = result.message || "Failed to send message.";
-        }
-      }
-    } catch (error) {
-      if (formStatus) {
-        formStatus.textContent = "Something went wrong. Please try again.";
-      }
-    } finally {
-      if (submitBtn) {
-        submitBtn.disabled = false;
-        submitBtn.textContent = "Send Message";
-      }
-    }
-  });
-}

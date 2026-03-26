@@ -18,20 +18,23 @@ module.exports = async (req, res) => {
   }
 
   try {
-    const { name, email, message } = req.body;
+    const { name, email, message, phone, country, formType } = req.body;
 
-    if (!name || !email || !message) {
-      return res.status(400).json({
-        message: "All fields are required",
-      });
-    }
+if (!name || !email || !message) {
+  return res.status(400).json({
+    message: "Name, email, and message are required",
+  });
+}
 
-    await db.collection("contact_submissions").add({
-      name,
-      email,
-      message,
-      createdAt: admin.firestore.FieldValue.serverTimestamp(),
-    });
+await db.collection("contact_submissions").add({
+  name,
+  email,
+  phone: phone || "",
+  country: country || "",
+  formType: formType || "general",
+  message,
+  createdAt: admin.firestore.FieldValue.serverTimestamp(),
+});
 
     return res.status(200).json({ message: "Success" });
   } catch (error) {
