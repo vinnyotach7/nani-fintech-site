@@ -242,3 +242,55 @@ document.querySelectorAll(".interest-panel").forEach((panel) => {
     });
   }
 });
+const contactForm = document.getElementById("contactForm");
+const formStatus = document.getElementById("formStatus");
+
+if (contactForm) {
+  contactForm.addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const submitBtn = contactForm.querySelector('button[type="submit"]');
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Sending...";
+    }
+
+    const formData = {
+      name: contactForm.querySelector('[name="name"]').value.trim(),
+      email: contactForm.querySelector('[name="email"]').value.trim(),
+      message: contactForm.querySelector('[name="message"]').value.trim(),
+    };
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        if (formStatus) {
+          formStatus.textContent = "Message sent successfully.";
+        }
+        contactForm.reset();
+      } else {
+        if (formStatus) {
+          formStatus.textContent = result.message || "Failed to send message.";
+        }
+      }
+    } catch (error) {
+      if (formStatus) {
+        formStatus.textContent = "Something went wrong. Please try again.";
+      }
+    } finally {
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Send Message";
+      }
+    }
+  });
+}
