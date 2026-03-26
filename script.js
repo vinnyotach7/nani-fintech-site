@@ -93,7 +93,7 @@ if (backToTop) {
 }
 
 // ==============================
-// INTEREST FORM TABS
+// INTEREST FORM SETUP
 // ==============================
 const interestTabs = document.querySelectorAll(".interest-tab");
 const interestPanels = document.querySelectorAll(".interest-panel");
@@ -117,6 +117,50 @@ function resetPanelSteps(panel) {
   });
 }
 
+function markOriginalRequiredFields() {
+  if (!interestForm) return;
+
+  const fields = interestForm.querySelectorAll("input, select, textarea");
+  fields.forEach((field) => {
+    if (field.required) {
+      field.dataset.wasRequired = "true";
+    }
+  });
+}
+
+function syncRequiredFields() {
+  if (!interestForm) return;
+
+  interestPanels.forEach((panel) => {
+    const panelIsActive = panel.classList.contains("active");
+    const steps = panel.querySelectorAll(".multi-step-form");
+
+    if (steps.length) {
+      steps.forEach((step) => {
+        const stepIsActive = step.classList.contains("active-step");
+        const fields = step.querySelectorAll("input, select, textarea");
+
+        fields.forEach((field) => {
+          if (field.dataset.wasRequired === "true") {
+            field.required = panelIsActive && stepIsActive;
+          }
+        });
+      });
+    } else {
+      const fields = panel.querySelectorAll("input, select, textarea");
+
+      fields.forEach((field) => {
+        if (field.dataset.wasRequired === "true") {
+          field.required = panelIsActive;
+        }
+      });
+    }
+  });
+}
+
+// ==============================
+// INTEREST FORM TABS
+// ==============================
 if (interestTabs.length && interestPanels.length) {
   interestTabs.forEach((tab) => {
     tab.addEventListener("click", () => {
@@ -148,6 +192,8 @@ if (interestTabs.length && interestPanels.length) {
       if (successMessage) {
         successMessage.textContent = "";
       }
+
+      syncRequiredFields();
     });
   });
 }
@@ -162,9 +208,22 @@ document.querySelectorAll(".interest-panel").forEach((panel) => {
 
   if (nextBtn && steps.length > 1) {
     nextBtn.addEventListener("click", () => {
+      const currentStep = panel.querySelector(".multi-step-form.active-step");
+      if (!currentStep) return;
+
+      const visibleRequiredFields = currentStep.querySelectorAll("[required]");
+      for (const field of visibleRequiredFields) {
+        if (!field.checkValidity()) {
+          field.reportValidity();
+          return;
+        }
+      }
+
       steps.forEach((step) => step.classList.remove("active-step"));
       steps[1].classList.add("active-step");
+
       if (successMessage) successMessage.textContent = "";
+      syncRequiredFields();
     });
   }
 
@@ -172,7 +231,9 @@ document.querySelectorAll(".interest-panel").forEach((panel) => {
     prevBtn.addEventListener("click", () => {
       steps.forEach((step) => step.classList.remove("active-step"));
       steps[0].classList.add("active-step");
+
       if (successMessage) successMessage.textContent = "";
+      syncRequiredFields();
     });
   }
 });
@@ -285,11 +346,36 @@ function validatePayload(data) {
 }
 
 if (interestForm && successMessage) {
+  markOriginalRequiredFields();
+  syncRequiredFields();
+
   interestForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const formType = formTypeInput?.value || "general";
+    syncRequiredFields();
+
     const activePanel = interestForm.querySelector(".interest-panel.active");
+    const activeStep = activePanel?.querySelector(".multi-step-form.active-step");
+
+    if (activeStep) {
+      const visibleRequiredFields = activeStep.querySelectorAll("[required]");
+      for (const field of visibleRequiredFields) {
+        if (!field.checkValidity()) {
+          field.reportValidity();
+          return;
+        }
+      }
+    } else if (activePanel) {
+      const visibleRequiredFields = activePanel.querySelectorAll("[required]");
+      for (const field of visibleRequiredFields) {
+        if (!field.checkValidity()) {
+          field.reportValidity();
+          return;
+        }
+      }
+    }
+
+    const formType = formTypeInput?.value || "general";
     const submitBtn = activePanel?.querySelector('button[type="submit"]');
 
     successMessage.textContent = "";
@@ -305,6 +391,7 @@ if (interestForm && successMessage) {
 
     if (validationError) {
       successMessage.textContent = validationError;
+
       if (submitBtn) {
         submitBtn.disabled = false;
         submitBtn.textContent = submitBtn.dataset.originalText || "Submit";
@@ -345,6 +432,8 @@ if (interestForm && successMessage) {
         if (formTypeInput) {
           formTypeInput.value = "general";
         }
+
+        syncRequiredFields();
       } else {
         successMessage.textContent =
           result.message || "Submission failed. Please try again.";
