@@ -18,21 +18,15 @@ module.exports = async (req, res) => {
   }
 
   try {
-    const { name, email, message, phone, country, formType } = req.body;
-
-if (!name || !email || !message) {
-  return res.status(400).json({
-    message: "Name, email, and message are required",
-  });
-}
+    const { name, email, phone, country, message, formType } = req.body;
 
 await db.collection("contact_submissions").add({
   name,
   email,
-  phone: phone || "",
-  country: country || "",
-  formType: formType || "general",
+  phone,
+  country,
   message,
+  formType,
   createdAt: admin.firestore.FieldValue.serverTimestamp(),
 });
 

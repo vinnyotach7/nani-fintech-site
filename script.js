@@ -103,10 +103,12 @@ if (backToTop) {
 }
 
 // ==============================
-// CONTACT FORM TABS (NEW FORM)
+// INTEREST FORM TABS
 // ==============================
 const interestTabs = document.querySelectorAll(".interest-tab");
 const interestPanels = document.querySelectorAll(".interest-panel");
+const interestForm = document.getElementById("interestForm");
+const successMessage = document.querySelector(".interest-success");
 const formTypeInput = document.getElementById("formType");
 
 const panelMap = {
@@ -115,6 +117,15 @@ const panelMap = {
   businessPanel: "business",
   updatesPanel: "q4_updates",
 };
+
+function resetPanelSteps(panel) {
+  const steps = panel.querySelectorAll(".multi-step-form");
+  if (!steps.length) return;
+
+  steps.forEach((step, index) => {
+    step.classList.toggle("active-step", index === 0);
+  });
+}
 
 if (interestTabs.length && interestPanels.length) {
   interestTabs.forEach((tab) => {
@@ -137,27 +148,168 @@ if (interestTabs.length && interestPanels.length) {
       const activePanel = document.getElementById(target);
       if (activePanel) {
         activePanel.classList.add("active");
+        resetPanelSteps(activePanel);
       }
 
       if (formTypeInput && panelMap[target]) {
         formTypeInput.value = panelMap[target];
+      }
+
+      if (successMessage) {
+        successMessage.textContent = "";
       }
     });
   });
 }
 
 // ==============================
-// FORM HANDLING (LOCAL PREVIEW UX)
+// MULTI-STEP FORM NAVIGATION
 // ==============================
-const interestForm = document.getElementById("interestForm");
-const successMessage = document.querySelector(".interest-success");
+document.querySelectorAll(".interest-panel").forEach((panel) => {
+  const steps = panel.querySelectorAll(".multi-step-form");
+  const nextBtn = panel.querySelector(".next-step");
+  const prevBtn = panel.querySelector(".prev-step");
+
+  if (nextBtn && steps.length > 1) {
+    nextBtn.addEventListener("click", () => {
+      steps.forEach((step) => step.classList.remove("active-step"));
+      steps[1].classList.add("active-step");
+      if (successMessage) successMessage.textContent = "";
+    });
+  }
+
+  if (prevBtn && steps.length > 1) {
+    prevBtn.addEventListener("click", () => {
+      steps.forEach((step) => step.classList.remove("active-step"));
+      steps[0].classList.add("active-step");
+      if (successMessage) successMessage.textContent = "";
+    });
+  }
+});
+
+// ==============================
+// INTEREST FORM SUBMISSION
+// ==============================
+function getValue(form, selector) {
+  return form.querySelector(selector)?.value.trim() || "";
+}
+
+function getCombinedName(firstName, lastName) {
+  return `${firstName} ${lastName}`.trim();
+}
+
+function buildFormPayload(form, formType) {
+  const data = {
+    name: "",
+    email: "",
+    phone: "",
+    country: "",
+    message: "",
+    formType,
+  };
+
+  if (formType === "general") {
+    const firstName = getValue(form, '[name="general_first_name"]');
+    const lastName = getValue(form, '[name="general_last_name"]');
+
+    data.name = getCombinedName(firstName, lastName);
+    data.email = getValue(form, '[name="general_email"]');
+    data.phone = getValue(form, '[name="general_phone"]');
+    data.country = getValue(form, '[name="general_country"]');
+
+    const interestType = getValue(form, '[name="general_interest_type"]');
+    const message = getValue(form, '[name="general_message"]');
+
+    data.message = [interestType ? `Interest Type: ${interestType}` : "", message]
+      .filter(Boolean)
+      .join(" | ");
+  }
+
+  if (formType === "investor") {
+    const firstName = getValue(form, '[name="investor_first_name"]');
+    const lastName = getValue(form, '[name="investor_last_name"]');
+
+    data.name = getCombinedName(firstName, lastName);
+    data.email = getValue(form, '[name="investor_email"]');
+    data.phone = getValue(form, '[name="investor_phone"]');
+    data.country = getValue(form, '[name="investor_country"]');
+
+    const investmentRange = getValue(form, '[name="investment_range"]');
+    const opportunity = getValue(form, '[name="investor_interest"]');
+    const message = getValue(form, '[name="investor_message"]');
+    const consentChecked = form.querySelector('[name="investor_consent"]')?.checked;
+
+    data.message = [
+      investmentRange ? `Investment Range: ${investmentRange}` : "",
+      opportunity ? `Opportunity: ${opportunity}` : "",
+      consentChecked ? "Consent: Yes" : "Consent: No",
+      message,
+    ]
+      .filter(Boolean)
+      .join(" | ");
+  }
+
+  if (formType === "business") {
+    const firstName = getValue(form, '[name="business_first_name"]');
+    const lastName = getValue(form, '[name="business_last_name"]');
+
+    data.name = getCombinedName(firstName, lastName);
+    data.email = getValue(form, '[name="business_email"]');
+    data.phone = getValue(form, '[name="business_phone"]');
+    data.country = getValue(form, '[name="business_country"]');
+
+    const companyName = getValue(form, '[name="company_name"]');
+    const businessType = getValue(form, '[name="business_type"]');
+    const businessMessage = getValue(form, '[name="business_message"]');
+
+    data.message = [
+      companyName ? `Company Name: ${companyName}` : "",
+      businessType ? `Business Type: ${businessType}` : "",
+      businessMessage,
+    ]
+      .filter(Boolean)
+      .join(" | ");
+  }
+
+  if (formType === "q4_updates") {
+    const firstName = getValue(form, '[name="updates_first_name"]');
+    const lastName = getValue(form, '[name="updates_last_name"]');
+
+    data.name = getCombinedName(firstName, lastName) || "Updates Subscriber";
+    data.email = getValue(form, '[name="updates_email"]');
+    data.phone = getValue(form, '[name="updates_phone"]');
+    data.country = getValue(form, '[name="updates_country"]');
+
+    const updatePreference = getValue(form, '[name="update_preference"]');
+    data.message = updatePreference
+      ? `Subscribed for updates | Preference: ${updatePreference}`
+      : "Subscribed for updates";
+  }
+
+  return data;
+}
+
+function validatePayload(data) {
+  if (!data.name || !data.email) {
+    return "Please complete the required fields before submitting.";
+  }
+
+  if (!data.message) {
+    return "Please add a short message or selection before submitting.";
+  }
+
+  return "";
+}
 
 if (interestForm && successMessage) {
   interestForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
+    const formType = formTypeInput?.value || "general";
     const activePanel = interestForm.querySelector(".interest-panel.active");
     const submitBtn = activePanel?.querySelector('button[type="submit"]');
+
+    successMessage.textContent = "";
 
     if (submitBtn) {
       submitBtn.disabled = true;
@@ -165,96 +317,53 @@ if (interestForm && successMessage) {
       submitBtn.textContent = "Submitting...";
     }
 
-    successMessage.textContent = "Submitting...";
+    const payload = buildFormPayload(interestForm, formType);
+    const validationError = validatePayload(payload);
 
-    const formType = formTypeInput ? formTypeInput.value : "general";
+    if (validationError) {
+      successMessage.textContent = validationError;
 
-    let formData = {
-      formType,
-      name: "",
-      email: "",
-      phone: "",
-      country: "",
-      message: "",
-    };
-
-    if (formType === "general") {
-      formData.name =
-        `${interestForm.querySelector('[name="general_first_name"]')?.value || ""} ${interestForm.querySelector('[name="general_last_name"]')?.value || ""}`.trim();
-      formData.email =
-        interestForm.querySelector('[name="general_email"]')?.value.trim() || "";
-      formData.phone =
-        interestForm.querySelector('[name="general_phone"]')?.value.trim() || "";
-      formData.country =
-        interestForm.querySelector('[name="general_country"]')?.value.trim() || "";
-      formData.message =
-        interestForm.querySelector('[name="general_message"]')?.value.trim() || "";
-    }
-
-    if (formType === "investor") {
-      formData.name =
-        `${interestForm.querySelector('[name="investor_first_name"]')?.value || ""} ${interestForm.querySelector('[name="investor_last_name"]')?.value || ""}`.trim();
-      formData.email =
-        interestForm.querySelector('[name="investor_email"]')?.value.trim() || "";
-      formData.phone =
-        interestForm.querySelector('[name="investor_phone"]')?.value.trim() || "";
-      formData.country =
-        interestForm.querySelector('[name="investor_country"]')?.value.trim() || "";
-      formData.message =
-        interestForm.querySelector('[name="investor_interest"]')?.value.trim() || "Investor interest form submission";
-    }
-
-    if (formType === "business") {
-      formData.name =
-        interestForm.querySelector('[name="business_contact_name"]')?.value.trim() || "";
-      formData.email =
-        interestForm.querySelector('[name="business_email"]')?.value.trim() || "";
-      formData.phone =
-        interestForm.querySelector('[name="business_phone"]')?.value.trim() || "";
-      formData.country =
-        interestForm.querySelector('[name="business_country"]')?.value.trim() || "";
-      formData.message =
-        interestForm.querySelector('[name="business_message"]')?.value.trim() || "Business enquiry form submission";
-    }
-
-    if (formType === "q4_updates") {
-      formData.name =
-        interestForm.querySelector('[name="updates_name"]')?.value.trim() || "Updates subscriber";
-      formData.email =
-        interestForm.querySelector('[name="updates_email"]')?.value.trim() || "";
-      formData.phone =
-        interestForm.querySelector('[name="updates_phone"]')?.value.trim() || "";
-      formData.country =
-        interestForm.querySelector('[name="updates_country"]')?.value.trim() || "";
-      formData.message = "Q4 updates subscription";
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = submitBtn.dataset.originalText || "Submit";
+      }
+      return;
     }
 
     try {
       const response = await fetch("/api/contact", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(payload),
       });
 
       const result = await response.json();
 
       if (response.ok) {
-        successMessage.textContent = "Thank you. Your form has been submitted successfully.";
+        successMessage.textContent = "Thank you. Your submission has been received.";
         interestForm.reset();
 
-        interestPanels.forEach((panel) => {
-          const steps = panel.querySelectorAll(".multi-step-form");
-          steps.forEach((step, index) => {
-            step.classList.toggle("active-step", index === 0);
-          });
+        interestPanels.forEach((panel, index) => {
+          panel.classList.toggle("active", index === 0);
+          resetPanelSteps(panel);
         });
+
+        interestTabs.forEach((tab, index) => {
+          tab.classList.toggle("active", index === 0);
+          tab.setAttribute("aria-selected", index === 0 ? "true" : "false");
+        });
+
+        if (formTypeInput) {
+          formTypeInput.value = "general";
+        }
       } else {
-        successMessage.textContent = result.message || "Something went wrong. Please try again.";
+        successMessage.textContent =
+          result.message || "Something went wrong. Please try again.";
       }
     } catch (error) {
-      successMessage.textContent = "Something went wrong. Please try again.";
+      successMessage.textContent = "Error submitting form. Please try again.";
     } finally {
       if (submitBtn) {
         submitBtn.disabled = false;
@@ -263,23 +372,3 @@ if (interestForm && successMessage) {
     }
   });
 }
-// MULTI STEP FORM (WORKS PER TAB)
-document.querySelectorAll(".interest-panel").forEach((panel) => {
-  const steps = panel.querySelectorAll(".multi-step-form");
-  const nextBtn = panel.querySelector(".next-step");
-  const prevBtn = panel.querySelector(".prev-step");
-
-  if (nextBtn && steps.length > 1) {
-    nextBtn.addEventListener("click", () => {
-      steps.forEach((s) => s.classList.remove("active-step"));
-      steps[1].classList.add("active-step");
-    });
-  }
-
-  if (prevBtn && steps.length > 1) {
-    prevBtn.addEventListener("click", () => {
-      steps.forEach((s) => s.classList.remove("active-step"));
-      steps[0].classList.add("active-step");
-    });
-  }
-});
