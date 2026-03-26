@@ -64,12 +64,7 @@ const navShell = document.querySelector(".nav-shell");
 
 function handleNavShadow() {
   if (!navShell) return;
-
-  if (window.scrollY > 20) {
-    navShell.classList.add("scrolled");
-  } else {
-    navShell.classList.remove("scrolled");
-  }
+  navShell.classList.toggle("scrolled", window.scrollY > 20);
 }
 
 window.addEventListener("scroll", handleNavShadow);
@@ -82,12 +77,7 @@ const backToTop = document.getElementById("backToTop");
 
 function handleBackToTopVisibility() {
   if (!backToTop) return;
-
-  if (window.scrollY > 300) {
-    backToTop.classList.add("show");
-  } else {
-    backToTop.classList.remove("show");
-  }
+  backToTop.classList.toggle("show", window.scrollY > 300);
 }
 
 if (backToTop) {
@@ -194,11 +184,11 @@ function getValue(form, selector) {
   return form.querySelector(selector)?.value.trim() || "";
 }
 
-function getCombinedName(firstName, lastName) {
+function combineName(firstName, lastName) {
   return `${firstName} ${lastName}`.trim();
 }
 
-function buildFormPayload(form, formType) {
+function buildPayload(form, formType) {
   const data = {
     name: "",
     email: "",
@@ -211,15 +201,13 @@ function buildFormPayload(form, formType) {
   if (formType === "general") {
     const firstName = getValue(form, '[name="general_first_name"]');
     const lastName = getValue(form, '[name="general_last_name"]');
-
-    data.name = getCombinedName(firstName, lastName);
-    data.email = getValue(form, '[name="general_email"]');
-    data.phone = getValue(form, '[name="general_phone"]');
-    data.country = getValue(form, '[name="general_country"]');
-
     const interestType = getValue(form, '[name="general_interest_type"]');
     const message = getValue(form, '[name="general_message"]');
 
+    data.name = combineName(firstName, lastName);
+    data.email = getValue(form, '[name="general_email"]');
+    data.phone = getValue(form, '[name="general_phone"]');
+    data.country = getValue(form, '[name="general_country"]');
     data.message = [interestType ? `Interest Type: ${interestType}` : "", message]
       .filter(Boolean)
       .join(" | ");
@@ -228,21 +216,19 @@ function buildFormPayload(form, formType) {
   if (formType === "investor") {
     const firstName = getValue(form, '[name="investor_first_name"]');
     const lastName = getValue(form, '[name="investor_last_name"]');
-
-    data.name = getCombinedName(firstName, lastName);
-    data.email = getValue(form, '[name="investor_email"]');
-    data.phone = getValue(form, '[name="investor_phone"]');
-    data.country = getValue(form, '[name="investor_country"]');
-
     const investmentRange = getValue(form, '[name="investment_range"]');
     const opportunity = getValue(form, '[name="investor_interest"]');
     const message = getValue(form, '[name="investor_message"]');
-    const consentChecked = form.querySelector('[name="investor_consent"]')?.checked;
+    const consent = form.querySelector('[name="investor_consent"]')?.checked;
 
+    data.name = combineName(firstName, lastName);
+    data.email = getValue(form, '[name="investor_email"]');
+    data.phone = getValue(form, '[name="investor_phone"]');
+    data.country = getValue(form, '[name="investor_country"]');
     data.message = [
       investmentRange ? `Investment Range: ${investmentRange}` : "",
       opportunity ? `Opportunity: ${opportunity}` : "",
-      consentChecked ? "Consent: Yes" : "Consent: No",
+      consent ? "Consent: Yes" : "Consent: No",
       message,
     ]
       .filter(Boolean)
@@ -252,16 +238,14 @@ function buildFormPayload(form, formType) {
   if (formType === "business") {
     const firstName = getValue(form, '[name="business_first_name"]');
     const lastName = getValue(form, '[name="business_last_name"]');
-
-    data.name = getCombinedName(firstName, lastName);
-    data.email = getValue(form, '[name="business_email"]');
-    data.phone = getValue(form, '[name="business_phone"]');
-    data.country = getValue(form, '[name="business_country"]');
-
     const companyName = getValue(form, '[name="company_name"]');
     const businessType = getValue(form, '[name="business_type"]');
     const businessMessage = getValue(form, '[name="business_message"]');
 
+    data.name = combineName(firstName, lastName);
+    data.email = getValue(form, '[name="business_email"]');
+    data.phone = getValue(form, '[name="business_phone"]');
+    data.country = getValue(form, '[name="business_country"]');
     data.message = [
       companyName ? `Company Name: ${companyName}` : "",
       businessType ? `Business Type: ${businessType}` : "",
@@ -274,13 +258,12 @@ function buildFormPayload(form, formType) {
   if (formType === "q4_updates") {
     const firstName = getValue(form, '[name="updates_first_name"]');
     const lastName = getValue(form, '[name="updates_last_name"]');
+    const updatePreference = getValue(form, '[name="update_preference"]');
 
-    data.name = getCombinedName(firstName, lastName) || "Updates Subscriber";
+    data.name = combineName(firstName, lastName) || "Updates Subscriber";
     data.email = getValue(form, '[name="updates_email"]');
     data.phone = getValue(form, '[name="updates_phone"]');
     data.country = getValue(form, '[name="updates_country"]');
-
-    const updatePreference = getValue(form, '[name="update_preference"]');
     data.message = updatePreference
       ? `Subscribed for updates | Preference: ${updatePreference}`
       : "Subscribed for updates";
@@ -291,7 +274,7 @@ function buildFormPayload(form, formType) {
 
 function validatePayload(data) {
   if (!data.name || !data.email) {
-    return "Please complete the required fields before submitting.";
+    return "Please complete the required fields.";
   }
 
   if (!data.message) {
@@ -317,12 +300,11 @@ if (interestForm && successMessage) {
       submitBtn.textContent = "Submitting...";
     }
 
-    const payload = buildFormPayload(interestForm, formType);
+    const payload = buildPayload(interestForm, formType);
     const validationError = validatePayload(payload);
 
     if (validationError) {
       successMessage.textContent = validationError;
-
       if (submitBtn) {
         submitBtn.disabled = false;
         submitBtn.textContent = submitBtn.dataset.originalText || "Submit";
@@ -339,7 +321,12 @@ if (interestForm && successMessage) {
         body: JSON.stringify(payload),
       });
 
-      const result = await response.json();
+      let result = {};
+      try {
+        result = await response.json();
+      } catch {
+        result = {};
+      }
 
       if (response.ok) {
         successMessage.textContent = "Thank you. Your submission has been received.";
@@ -360,10 +347,12 @@ if (interestForm && successMessage) {
         }
       } else {
         successMessage.textContent =
-          result.message || "Something went wrong. Please try again.";
+          result.message || "Submission failed. Please try again.";
       }
     } catch (error) {
-      successMessage.textContent = "Error submitting form. Please try again.";
+      successMessage.textContent =
+        "Could not connect to the form service. Please try again.";
+      console.error("Interest form submit error:", error);
     } finally {
       if (submitBtn) {
         submitBtn.disabled = false;
