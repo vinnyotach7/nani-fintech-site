@@ -1430,15 +1430,20 @@ margin: 0 auto 38px;
 
 .sharia-advisor-inner {
   display: grid;
-  grid-template-columns: 120px 1fr;
-  gap: 22px;
+  grid-template-columns: 210px 1fr;
+  gap: 26px;
   align-items: center;
-  padding: 22px;
+  padding: 24px 28px;
 }
 
+.sharia-advisor {
+  display: contents;
+}
+
+
 .sharia-advisor-photo-wrap {
-  width: 120px;
-  height: 120px;
+  width: 210px;
+  height: 210px;
   border-radius: 22px;
   overflow: hidden;
   background: transparent;
@@ -1446,12 +1451,21 @@ margin: 0 auto 38px;
 }
 
 .sharia-advisor-photo {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: top center;
-  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
+  object-fit: cover !important;
+  object-position: center 30% !important;
+  display: block !important;
   border-radius: 22px;
+  transform: none !important;
+}
+
+.sharia-advisor-copy,
+.sharia-advisor-content {
+  flex: 1;
+  min-width: 0;
 }
 
 .sharia-advisor-label {
@@ -1469,14 +1483,16 @@ margin: 0 auto 38px;
   margin-bottom: 8px;
 }
 
+
 .sharia-advisor-role {
-  color: #000000; /* nice branded blue */
+  color: #1d4ed8 !important;
   font-weight: 700;
   margin-bottom: 4px;
 }
 
+
 .sharia-advisor-org {
-  color: #1f2937;
+  color: #4b5563 !important;
   font-weight: 600;
 }
 
@@ -1499,6 +1515,7 @@ margin: 0 auto 38px;
   background: #eef2ff;
   border: 1px solid rgba(36, 107, 219, 0.12);
 }
+
 .sharia-advisor-card .sharia-advisor-role {
   color: #1d4ed8 !important;
 }
@@ -1574,26 +1591,27 @@ margin: 0 auto 38px;
 /* RESPONSIVE */
 @media (max-width: 700px) {
   .sharia-advisor-inner {
-    grid-template-columns: 1fr;
+    flex-direction: column;
     text-align: center;
   }
 
   .sharia-advisor-photo-wrap {
     margin: 0 auto;
+    width: 140px;
+    height: 140px;
+    min-width: 140px;
+    flex-basis: 140px;
   }
 
   .sharia-advisor-meta {
-    justify-content: center;
+    align-items: center;
   }
-
-  .sharia-certificate-inner {
-    padding: 24px 20px;
-  }
+}
 
   .sharia-certificate-inner h3 {
     font-size: 1.6rem;
   }
-}
+
 /* ROADMAP SECTION */
 #roadmap {
   background: #ffffff;
