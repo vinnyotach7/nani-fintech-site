@@ -918,7 +918,7 @@ p {
   font-weight: 500;
   line-height: 1.2;
   opacity: 0.9;
-  color: #111827;
+  color: #1f2937;
 }
 
 #opportunities .section-head p {
@@ -941,8 +941,13 @@ p {
 }
 
 #opportunities .section-label::after {
+ content: "";
+  display: block;
+  width: 60%; /* nice premium width */
+  height: 2px;
+  margin: 6px auto 0;
+  border-radius: 2px;
   background: linear-gradient(90deg, #14b8e6, #246bdb, #8a63f7);
-  display: none;
 }
 
 .opportunities-grid {
@@ -1146,15 +1151,26 @@ p {
 }
 
 #how-it-works .section-head {
-  margin-bottom: 38px;
+margin: 0 auto 38px;
+  text-align: center;
+  max-width: 720px;
 }
 
 #how-it-works .section-label {
   color: rgba(255, 255, 255, 0.88);
+  display: inline-block;
+  position: relative;
+  text-align: center;
 }
 
 #how-it-works .section-label::after {
-  background: linear-gradient(90deg, #ffffff, rgba(255,255,255,0.55));
+  content: "";
+  display: block;
+  width: 60%;
+  height: 2px;
+  margin: 6px auto 0;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #ffffff, rgba(255,255,255,0.6));
 }
 
 #how-it-works .section-head h2 {
@@ -1255,10 +1271,25 @@ p {
 #trust .section-label {
   font-size: 1.6rem;
   letter-spacing: 0.22em;
+  position: relative;
+  display: inline-block;
 }
-
+#trust .section-head {
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto 40px;
+}
 #trust .section-head h2 {
   font-size: clamp(2rem, 3vw, 2.6rem);
+}
+#trust .section-label::after {
+  content: "";
+  display: block;
+  width: 60%;
+  height: 2px;
+  margin: 6px auto 0;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #14b8e6, #246bdb, #8a63f7);
 }
 /* SHARIAH SECTION */
 .split-grid {
@@ -1291,9 +1322,9 @@ p {
   width: 100%;
   border-radius: 24px;
   overflow: hidden;
-  background: rgba(255,255,255,0.08);
+  /* background: rgba(255,255,255,0.08);
   border: 1px solid rgba(255,255,255,0.14);
-  box-shadow: 0 14px 34px rgba(10, 20, 40, 0.12);
+  box-shadow: 0 14px 34px rgba(10, 20, 40, 0.12); */
   min-height: 320px;
 }
 
@@ -1302,8 +1333,14 @@ p {
   height: 100%;
   min-height: 320px;
   object-fit: cover;
-  object-position: center;
+  object-position: top;
   display: block;
+
+  border-radius: 24px;
+
+  /* blend effect */
+  opacity: 0.95;
+  mix-blend-mode: normal;
 }
 
 .quote-box,
@@ -1388,17 +1425,19 @@ p {
 .sharia-advisor-photo-wrap {
   width: 120px;
   height: 120px;
-  border-radius: 18px;
+  border-radius: 22px;
   overflow: hidden;
-  background: #f8fafc;
-  border: 1px solid rgba(17, 24, 39, 0.06);
+  background: transparent;
+  border: none;
 }
 
 .sharia-advisor-photo {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: top center;
   display: block;
+  border-radius: 22px;
 }
 
 .sharia-advisor-label {
@@ -1555,13 +1594,20 @@ p {
   font-size: 1.6rem;
   font-weight: 900;
   letter-spacing: 0.22em;
-
   background: linear-gradient(90deg, #00d4ff, #7b5cff);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  position: relative;
+  display: inline-block;
 }
 
 #roadmap .section-label::after {
+    content: "";
+  display: block;
+  width: 60px; /* clean short line */
+  height: 2px;
+  margin-top: 6px;
+  border-radius: 2px;
   background: linear-gradient(90deg, #14b8e6, #246bdb, #8a63f7);
 }
 
@@ -1767,16 +1813,23 @@ p {
   width: 100%;
   height: 220px;
   overflow: hidden;
-  background: #f8fafc;
-  transition: transform 0.35s ease;
+  background: transparent;
 }
 
+/* default (avatars) */
 .profile-top img {
   width: 100%;
   height: 100%;
+  display: block;
+  object-fit: contain;
+  object-position: center center;
+  border-radius: 16px;
+}
+
+/* real photos only */
+.profile-top img.real-photo {
   object-fit: contain;
   object-position: center top;
-  display: block;
 }
 
 .profile-body {
