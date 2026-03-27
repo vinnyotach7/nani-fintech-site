@@ -100,12 +100,22 @@ const interestPanels = document.querySelectorAll(".interest-panel");
 const interestForm = document.getElementById("interestForm");
 const successMessage = document.querySelector(".interest-success");
 const formTypeInput = document.getElementById("formType");
+const interestPopupModal = document.getElementById("interestPopupModal");
+const interestPopupClose = document.getElementById("interestPopupClose");
+const openInterestPopupButtons = document.querySelectorAll(".open-interest-popup");
 
 const panelMap = {
   generalPanel: "general",
   investorPanel: "investor",
   businessPanel: "business",
   updatesPanel: "q4_updates",
+};
+
+const panelByFormType = {
+  general: "generalPanel",
+  investor: "investorPanel",
+  business: "businessPanel",
+  q4_updates: "updatesPanel",
 };
 
 function resetPanelSteps(panel) {
@@ -158,6 +168,74 @@ function syncRequiredFields() {
   });
 }
 
+function activateInterestPanel(target) {
+  if (!target) return;
+
+  interestTabs.forEach((item) => {
+    const isActive = item.getAttribute("data-panel") === target;
+    item.classList.toggle("active", isActive);
+    item.setAttribute("aria-selected", isActive ? "true" : "false");
+  });
+
+  interestPanels.forEach((panel) => {
+    const isActive = panel.id === target;
+    panel.classList.toggle("active", isActive);
+    if (isActive) {
+      resetPanelSteps(panel);
+    }
+  });
+
+  if (formTypeInput && panelMap[target]) {
+    formTypeInput.value = panelMap[target];
+  }
+
+  if (successMessage) {
+    successMessage.textContent = "";
+  }
+
+  syncRequiredFields();
+}
+
+function setPrefilledInterest(prefillInterest, formType = "general") {
+  if (!interestForm) return;
+
+  const generalInterestSelect = interestForm.querySelector('[name="general_interest_type"]');
+  const generalMessage = interestForm.querySelector('[name="general_message"]');
+  const investorInterestSelect = interestForm.querySelector('[name="investor_interest"]');
+  const investorMessage = interestForm.querySelector('[name="investor_message"]');
+  const businessMessage = interestForm.querySelector('[name="business_message"]');
+
+  if (generalInterestSelect) {
+    const hasMatch = Array.from(generalInterestSelect.options).some(
+      (option) => option.value === prefillInterest
+    );
+    generalInterestSelect.value = hasMatch ? prefillInterest : "";
+  }
+
+  if (investorInterestSelect) {
+    const hasMatch = Array.from(investorInterestSelect.options).some(
+      (option) => option.value === prefillInterest
+    );
+    investorInterestSelect.value = hasMatch ? prefillInterest : "";
+  }
+
+  if (generalMessage) {
+    generalMessage.value = prefillInterest ? `I'm interested in: ${prefillInterest}` : "";
+  }
+
+  if (investorMessage) {
+    investorMessage.value = prefillInterest ? `I'm interested in: ${prefillInterest}` : "";
+  }
+
+  if (businessMessage) {
+    businessMessage.value = prefillInterest ? `I'm interested in: ${prefillInterest}` : "";
+  }
+
+  if (formTypeInput) {
+    formTypeInput.value = formType;
+  }
+}
+
 // ==============================
 // INTEREST FORM TABS
 // ==============================
@@ -165,35 +243,7 @@ if (interestTabs.length && interestPanels.length) {
   interestTabs.forEach((tab) => {
     tab.addEventListener("click", () => {
       const target = tab.getAttribute("data-panel");
-      if (!target) return;
-
-      interestTabs.forEach((item) => {
-        item.classList.remove("active");
-        item.setAttribute("aria-selected", "false");
-      });
-
-      interestPanels.forEach((panel) => {
-        panel.classList.remove("active");
-      });
-
-      tab.classList.add("active");
-      tab.setAttribute("aria-selected", "true");
-
-      const activePanel = document.getElementById(target);
-      if (activePanel) {
-        activePanel.classList.add("active");
-        resetPanelSteps(activePanel);
-      }
-
-      if (formTypeInput && panelMap[target]) {
-        formTypeInput.value = panelMap[target];
-      }
-
-      if (successMessage) {
-        successMessage.textContent = "";
-      }
-
-      syncRequiredFields();
+      activateInterestPanel(target);
     });
   });
 }
@@ -239,7 +289,7 @@ document.querySelectorAll(".interest-panel").forEach((panel) => {
 });
 
 // ==============================
-// INTEREST FORM SUBMISSION
+// INTEREST FORM SUBMISSION HELPERS
 // ==============================
 function getValue(form, selector) {
   return form.querySelector(selector)?.value.trim() || "";
@@ -345,6 +395,97 @@ function validatePayload(data) {
   return "";
 }
 
+function resetInterestFormToDefault() {
+  if (!interestForm) return;
+
+  interestForm.reset();
+
+  interestPanels.forEach((panel, index) => {
+    panel.classList.toggle("active", index === 0);
+    resetPanelSteps(panel);
+  });
+
+  interestTabs.forEach((tab, index) => {
+    tab.classList.toggle("active", index === 0);
+    tab.setAttribute("aria-selected", index === 0 ? "true" : "false");
+  });
+
+  if (formTypeInput) {
+    formTypeInput.value = "general";
+  }
+
+  if (successMessage) {
+    successMessage.textContent = "";
+  }
+
+  syncRequiredFields();
+}
+
+// ==============================
+// INTEREST POPUP MODAL
+// ==============================
+function openInterestPopup(prefillInterest = "", formType = "general") {
+  if (!interestPopupModal || !interestForm) return;
+
+  interestPopupModal.classList.add("show");
+  interestPopupModal.setAttribute("aria-hidden", "false");
+  document.body.classList.add("modal-open");
+
+  const targetPanelId = panelByFormType[formType] || "generalPanel";
+  activateInterestPanel(targetPanelId);
+  setPrefilledInterest(prefillInterest, formType);
+
+  const firstInput = interestPopupModal.querySelector("input, select, textarea");
+  if (firstInput) {
+    setTimeout(() => firstInput.focus(), 100);
+  }
+}
+
+function closeInterestPopup() {
+  if (!interestPopupModal) return;
+  interestPopupModal.classList.remove("show");
+  interestPopupModal.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("modal-open");
+}
+
+openInterestPopupButtons.forEach((button) => {
+  button.addEventListener("click", (e) => {
+    e.preventDefault();
+
+    const interest = button.getAttribute("data-interest") || "";
+    const formType = button.getAttribute("data-form-type") || "general";
+
+    const naniPopup = document.getElementById("naniPopup");
+    if (naniPopup) {
+      naniPopup.classList.remove("show");
+      naniPopup.setAttribute("aria-hidden", "true");
+    }
+
+    openInterestPopup(interest, formType);
+  });
+});
+
+if (interestPopupClose) {
+  interestPopupClose.addEventListener("click", closeInterestPopup);
+}
+
+if (interestPopupModal) {
+  interestPopupModal.addEventListener("click", (e) => {
+    if (e.target === interestPopupModal) {
+      closeInterestPopup();
+    }
+  });
+}
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") {
+    closeInterestPopup();
+  }
+});
+
+// ==============================
+// INTEREST FORM SUBMISSION
+// ==============================
 if (interestForm && successMessage) {
   markOriginalRequiredFields();
   syncRequiredFields();
@@ -376,7 +517,8 @@ if (interestForm && successMessage) {
     }
 
     const formType = formTypeInput?.value || "general";
-    const submitBtn = activePanel?.querySelector('button[type="submit"]');
+    const submitBtn = activePanel?.querySelector('button[type="submit"]') ||
+      interestForm.querySelector('button[type="submit"]');
 
     successMessage.textContent = "";
 
@@ -417,23 +559,11 @@ if (interestForm && successMessage) {
 
       if (response.ok) {
         successMessage.textContent = "Thank you. Your submission has been received.";
-        interestForm.reset();
+        resetInterestFormToDefault();
 
-        interestPanels.forEach((panel, index) => {
-          panel.classList.toggle("active", index === 0);
-          resetPanelSteps(panel);
-        });
-
-        interestTabs.forEach((tab, index) => {
-          tab.classList.toggle("active", index === 0);
-          tab.setAttribute("aria-selected", index === 0 ? "true" : "false");
-        });
-
-        if (formTypeInput) {
-          formTypeInput.value = "general";
-        }
-
-        syncRequiredFields();
+        setTimeout(() => {
+          closeInterestPopup();
+        }, 1200);
       } else {
         successMessage.textContent =
           result.message || "Submission failed. Please try again.";
@@ -450,6 +580,7 @@ if (interestForm && successMessage) {
     }
   });
 }
+
 // ==============================
 // NANI POPUP CONTROL
 // ==============================
@@ -459,25 +590,28 @@ window.addEventListener("load", () => {
 
   if (!popup) return;
 
-  // show after 3 seconds
+  const hasClosed = localStorage.getItem("naniPopupClosed");
+
   setTimeout(() => {
-    popup.classList.add("show");
-    popup.setAttribute("aria-hidden", "false");
+    if (!hasClosed) {
+      popup.classList.add("show");
+      popup.setAttribute("aria-hidden", "false");
+    }
   }, 3000);
 
-  // close button
   if (closeBtn) {
     closeBtn.addEventListener("click", () => {
       popup.classList.remove("show");
       popup.setAttribute("aria-hidden", "true");
+      localStorage.setItem("naniPopupClosed", "true");
     });
   }
 
-  // click outside to close
   popup.addEventListener("click", (e) => {
     if (e.target === popup) {
       popup.classList.remove("show");
       popup.setAttribute("aria-hidden", "true");
+      localStorage.setItem("naniPopupClosed", "true");
     }
   });
 });
