@@ -450,3 +450,34 @@ if (interestForm && successMessage) {
     }
   });
 }
+// ==============================
+// NANI POPUP CONTROL
+// ==============================
+window.addEventListener("load", () => {
+  const popup = document.getElementById("naniPopup");
+  const closeBtn = document.getElementById("naniPopupClose");
+
+  if (!popup) return;
+
+  // show after 3 seconds
+  setTimeout(() => {
+    popup.classList.add("show");
+    popup.setAttribute("aria-hidden", "false");
+  }, 3000);
+
+  // close button
+  if (closeBtn) {
+    closeBtn.addEventListener("click", () => {
+      popup.classList.remove("show");
+      popup.setAttribute("aria-hidden", "true");
+    });
+  }
+
+  // click outside to close
+  popup.addEventListener("click", (e) => {
+    if (e.target === popup) {
+      popup.classList.remove("show");
+      popup.setAttribute("aria-hidden", "true");
+    }
+  });
+});

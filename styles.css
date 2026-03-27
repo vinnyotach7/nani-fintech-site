@@ -287,7 +287,7 @@ p {
 #backToTop {
   position: fixed;
   bottom: 28px;
-  left: 24px;
+  right: 24px;
   width: 48px;
   height: 48px;
   border: 0;
