@@ -3033,14 +3033,14 @@ body.modal-open {
     align-items: stretch;
   }
 
-#backToTop {
-  right: 16px;
-  left: auto;
-  bottom: 20px;
-  width: 44px;
-  height: 44px;
-  font-size: 18px;
-}
+  #backToTop {
+    left: auto;
+    right: 16px;
+    bottom: 20px;
+    width: 44px;
+    height: 44px;
+    font-size: 18px;
+  }
 }
 
 @media (max-width: 480px) {
