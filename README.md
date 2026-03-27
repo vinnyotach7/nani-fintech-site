@@ -116,3 +116,43 @@ Breakpoints:
 ---
 
 ## 📁 Project Structure
+
+
+---
+
+## ⚙️ Run Locally
+
+```bash
+git clone https://github.com/vinnyotach7/nani-fintech-site.git
+cd nani-fintech-site
+index.html
+
+## 🚀 Deployment
+vercel --prod
+
+## 🔐 Compliance Positioning
+Not a bank
+Does not hold funds
+Works with partners
+
+Focus:
+
+transparency
+structuring
+access
+
+# 🧠 Roadmap
+EMI integration
+Ayuuto savings system
+Investment marketplace
+API integrations
+Mobile app
+
+---
+ # 📞 Contact
+
+📧 info@nanifintechplus.com
+
+🌐 https://nanifintechplus.com
+
+📱 https://wa.me/447466632520
