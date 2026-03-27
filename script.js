@@ -590,28 +590,25 @@ window.addEventListener("load", () => {
 
   if (!popup) return;
 
-  const hasClosed = localStorage.getItem("naniPopupClosed");
-
+  // Show popup every time
   setTimeout(() => {
-    if (!hasClosed) {
-      popup.classList.add("show");
-      popup.setAttribute("aria-hidden", "false");
-    }
-  }, 3000);
+    popup.classList.add("show");
+    popup.setAttribute("aria-hidden", "false");
+  }, 1400);
 
+  // Close button
   if (closeBtn) {
     closeBtn.addEventListener("click", () => {
       popup.classList.remove("show");
       popup.setAttribute("aria-hidden", "true");
-      localStorage.setItem("naniPopupClosed", "true");
     });
   }
 
+  // Click outside closes
   popup.addEventListener("click", (e) => {
     if (e.target === popup) {
       popup.classList.remove("show");
       popup.setAttribute("aria-hidden", "true");
-      localStorage.setItem("naniPopupClosed", "true");
     }
   });
 });
