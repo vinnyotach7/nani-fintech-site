@@ -448,21 +448,22 @@ function closeInterestPopup() {
   document.body.classList.remove("modal-open");
 }
 
-openInterestPopupButtons.forEach((button) => {
-  button.addEventListener("click", (e) => {
-    e.preventDefault();
+document.addEventListener("click", (e) => {
+  const button = e.target.closest(".open-interest-popup");
+  if (!button) return;
 
-    const interest = button.getAttribute("data-interest") || "";
-    const formType = button.getAttribute("data-form-type") || "general";
+  e.preventDefault();
 
-    const naniPopup = document.getElementById("naniPopup");
-    if (naniPopup) {
-      naniPopup.classList.remove("show");
-      naniPopup.setAttribute("aria-hidden", "true");
-    }
+  const interest = button.getAttribute("data-interest") || "";
+  const formType = button.getAttribute("data-form-type") || "general";
 
-    openInterestPopup(interest, formType);
-  });
+  const naniPopup = document.getElementById("naniPopup");
+  if (naniPopup) {
+    naniPopup.classList.remove("show");
+    naniPopup.setAttribute("aria-hidden", "true");
+  }
+
+  openInterestPopup(interest, formType);
 });
 
 if (interestPopupClose) {
