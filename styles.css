@@ -1571,71 +1571,6 @@ margin: 0 auto 38px;
   color: #4b5563 !important;
 }
 
-/* SHARIA CERTIFICATE BLOCK */
-.sharia-certificate-block {
-  margin-top: 34px;
-  display: flex;
-  justify-content: center;
-}
-
-.sharia-certificate-inner {
-  width: 100%;
-  max-width: 860px;
-  border-radius: 28px;
-  padding: 30px 28px;
-  background: linear-gradient(135deg, #18b7df 0%, #246bdb 50%, #6c63ff 100%);
-  border: 1px solid rgba(255,255,255,0.14);
-  box-shadow: 0 20px 50px rgba(10, 20, 40, 0.16);
-  text-align: center;
-}
-
-.sharia-certificate-label {
-  color: rgba(255,255,255,0.82);
-  font-size: 0.82rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  margin-bottom: 10px;
-}
-
-.sharia-certificate-inner h3 {
-  color: #ffffff;
-  font-size: 2rem;
-  margin-bottom: 10px;
-}
-
-.sharia-certificate-inner p {
-  color: rgba(255,255,255,0.9);
-  max-width: 680px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.btn-light.sharia-download-btn {
-  display: inline-flex;
-  margin-top: 14px;
-  background: #ffffff;
-  color: #246bdb;
-  border-radius: 16px;
-  padding: 14px 22px;
-  font-weight: 800;
-  box-shadow: 0 12px 26px rgba(255,255,255,0.16);
-}
-
-.sharia-certificate-note {
-  margin-top: 18px;
-  padding: 14px 16px;
-  border-radius: 16px;
-  background: rgba(255,255,255,0.12);
-  border: 1px solid rgba(255,255,255,0.14);
-  color: rgba(255,255,255,0.88);
-  font-size: 0.82rem;
-  line-height: 1.65;
-  max-width: 760px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
 /* RESPONSIVE */
 @media (max-width: 700px) {
   .sharia-advisor-inner {
@@ -3825,4 +3760,424 @@ canvas {
   border-radius: 50%;
   background: linear-gradient(135deg, #38bdf8, #6366f1);
   flex-shrink: 0;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 1100px) {
+  .four-up {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .three-up {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .opportunities-grid,
+  .trust-grid,
+  .team-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .footer-grid {
+    grid-template-columns: 1.5fr 1fr 1fr;
+  }
+
+  .footer-grid > :first-child {
+    grid-column: 1 / -1;
+  }
+
+  .hero-grid {
+    gap: 40px;
+  }
+
+  .desktop-nav {
+    gap: 2px;
+  }
+
+  .desktop-nav a:not(.btn) {
+    padding: 10px 10px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 980px) {
+  .hero-grid,
+  .split-grid,
+  .three-up,
+  .four-up,
+  .two-up,
+  .footer-grid,
+  .form-grid,
+  .interest-form-grid,
+  .opportunities-grid,
+  .trust-grid,
+  .team-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .hero-copy,
+  .hero-panel,
+  .hero-visual {
+    max-width: 100%;
+    justify-self: stretch;
+  }
+
+  .hero-visual {
+    height: auto !important;
+    min-height: 0 !important;
+    max-width: 100%;
+    aspect-ratio: auto;
+  }
+
+  .hero-visual img,
+  .hero-image {
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+    transform: none;
+  }
+
+  .section-pad {
+    padding: 76px 0 44px;
+  }
+
+  .about-section {
+    padding-top: 60px;
+    padding-bottom: 72px;
+  }
+
+  .role-section,
+  .team-section {
+    padding-top: 64px;
+    padding-bottom: 76px;
+  }
+
+  .hero-grid {
+    gap: 32px;
+  }
+
+  .hero-copy,
+  .section-head,
+  .section-head-wide {
+    max-width: 100%;
+  }
+
+  .hero-actions,
+  .interest-submit-wrap,
+  .form-actions,
+  .step-actions,
+  .sharia-advisor-meta {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .interest-field.full-width {
+    grid-column: auto;
+  }
+
+  .about-card,
+  .role-card,
+  .product-card,
+  .trust-card,
+  .roadmap-card,
+  .profile-card,
+  .step-card,
+  .term-card,
+  .contact-form-card {
+    padding: 24px 20px;
+  }
+
+  .profile-top {
+    height: 220px;
+  }
+
+  .meta-list div {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .meta-list strong {
+    text-align: left;
+    max-width: 100%;
+  }
+
+  .sharia-advisor-inner {
+    grid-template-columns: 1fr !important;
+    gap: 20px;
+    text-align: center;
+  }
+
+  .sharia-advisor-photo-wrap {
+    margin: 0 auto;
+    width: 180px;
+    height: 180px;
+  }
+
+  .sharia-advisor-meta {
+    align-items: center;
+  }
+
+  .sharia-advisor-content,
+  .sharia-advisor-copy {
+    text-align: center;
+  }
+}
+
+@media (max-width: 820px) {
+  .desktop-nav {
+    display: none;
+  }
+
+  .menu-toggle {
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .nav-row {
+    min-height: 78px;
+  }
+
+  .mobile-nav {
+    display: none;
+    grid-template-columns: 1fr;
+    gap: 6px;
+    padding: 10px 20px 18px;
+  }
+
+  .mobile-nav.open {
+    display: grid;
+  }
+
+  .mobile-nav a {
+    width: 100%;
+  }
+
+  .mobile-cta {
+    margin-top: 8px;
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 640px) {
+  html,
+  body {
+    overflow-x: hidden;
+  }
+
+  .container,
+  .narrow {
+    width: min(100% - 24px, 1180px);
+  }
+
+  .section-pad {
+    padding: 64px 0 36px;
+  }
+
+  .site-logo {
+    height: 48px;
+  }
+
+  .footer-logo {
+    height: 54px;
+  }
+
+  .hero {
+    min-height: auto;
+    padding-top: 24px;
+  }
+
+  .hero h1 {
+    font-size: clamp(2.1rem, 10vw, 3.2rem);
+    line-height: 1.05;
+  }
+
+  .hero-lead {
+    font-size: 1.02rem;
+  }
+
+  .hero-sub {
+    font-size: 0.95rem;
+  }
+
+  .hero-orb {
+    display: none;
+  }
+
+  .hero-actions,
+  .form-actions,
+  .legal-top,
+  .footer-bottom,
+  .interest-submit-wrap,
+  .step-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn,
+  .hero-actions .btn,
+  .interest-submit-wrap .btn-primary,
+  .step-actions .btn,
+  .nav-cta,
+  .mobile-cta {
+    width: 100%;
+    min-width: 0;
+    justify-content: center;
+  }
+
+  .form-shell,
+  .glass-card,
+  .card,
+  .step-card,
+  .product-card,
+  .roadmap-card,
+  .legal-card,
+  .contact-form-card,
+  .term-card {
+    padding: 22px 18px;
+  }
+
+  .section-label {
+    font-size: 1rem !important;
+    letter-spacing: 0.14em !important;
+  }
+
+  .section-head h2,
+  #how-it-works .section-head h2,
+  #trust .section-head h2,
+  #roadmap .section-head h2,
+  #shariah h2,
+  #opportunities .section-head h2 {
+    font-size: clamp(1.85rem, 8vw, 2.4rem);
+    line-height: 1.12;
+  }
+
+  .about-card h3,
+  .role-card h3,
+  #how-it-works .step-card h3,
+  .trust-card h3,
+  .roadmap-card h3,
+  .term-card h3,
+  .product-card h3,
+  .profile-card h3 {
+    font-size: 1.35rem;
+    line-height: 1.2;
+  }
+
+  .notice-inner {
+    min-height: 60px;
+  }
+
+  .tab-row,
+  .interest-tabs {
+    width: 100%;
+  }
+
+  .interest-disclaimer,
+  .form-note {
+    text-align: left;
+  }
+
+  .interest-popup-card .interest-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .interest-popup-card .step-actions,
+  .interest-popup-card .interest-submit-wrap {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  #backToTop {
+    right: 16px;
+    bottom: 20px;
+    width: 44px;
+    height: 44px;
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container,
+  .narrow {
+    width: min(100% - 20px, 1180px);
+  }
+
+  .section-pad {
+    padding: 56px 0 32px;
+  }
+
+  .nav-row {
+    min-height: 72px;
+  }
+
+  .site-logo {
+    height: 44px;
+  }
+
+  .hero h1 {
+    font-size: clamp(1.9rem, 11vw, 2.8rem);
+  }
+
+  .hero-lead {
+    font-size: 0.98rem;
+  }
+
+  .hero-sub {
+    font-size: 0.92rem;
+  }
+
+  .product-card,
+  .step-card,
+  .roadmap-card,
+  .trust-card,
+  .profile-card,
+  .contact-form-card,
+  .term-card,
+  .about-card,
+  .role-card {
+    padding: 18px 16px;
+    border-radius: 20px;
+  }
+
+  .profile-top {
+    height: 220px;
+  }
+
+  .sharia-advisor-inner {
+    padding: 20px 16px;
+  }
+
+  .sharia-advisor-photo-wrap {
+    width: 140px;
+    height: 140px;
+  }
+
+  .interest-popup-overlay {
+    padding: 12px;
+  }
+
+  .interest-popup-card {
+    padding: 20px 14px 18px;
+    border-radius: 18px;
+  }
+
+  .interest-popup-card .interest-tab {
+    font-size: 0.72rem;
+    padding: 10px 12px;
+  }
+
+  .product-topbar {
+    flex-wrap: wrap;
+  }
+
+  .opportunity-icon {
+    width: 46px;
+    height: 46px;
+  }
 }
