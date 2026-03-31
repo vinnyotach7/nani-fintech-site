@@ -917,7 +917,7 @@ p {
 
 /* ETHICAL OPPORTUNITIES SECTION */
 #opportunities {
-  background: #ffffff;
+  background: linear-gradient(to bottom, #ffffff, #f8fafc);
 }
 
 #opportunities .section-head {
@@ -955,9 +955,9 @@ p {
 }
 
 #opportunities .section-label::after {
- content: "";
+  content: "";
   display: block;
-  width: 60%; /* nice premium width */
+  width: 60%;
   height: 2px;
   margin: 6px auto 0;
   border-radius: 2px;
@@ -1166,8 +1166,8 @@ p {
 
 /* HOW IT WORKS SECTION */
 #how-it-works {
-  background: linear-gradient(135deg, #18b7df 0%, #246bdb 50%, #6c63ff 100%);
-  color: #ffffff;
+  background: #f8fafc;
+  color: #0f172a;
 }
 
 #how-it-works .section-head {
@@ -1177,7 +1177,7 @@ margin: 0 auto 38px;
 }
 
 #how-it-works .section-label {
-  color: rgba(255, 255, 255, 0.88);
+  color: #246bdb;
   display: inline-block;
   position: relative;
   text-align: center;
@@ -1190,11 +1190,11 @@ margin: 0 auto 38px;
   height: 2px;
   margin: 6px auto 0;
   border-radius: 2px;
-  background: linear-gradient(90deg, #ffffff, rgba(255,255,255,0.6));
+  background: linear-gradient(90deg, #14b8e6, #246bdb, #8a63f7);
 }
 
 #how-it-works .section-head h2 {
-  color: #ffffff;
+  color: #246bdb;
 }
 
 #how-it-works .section-head p {
@@ -1248,7 +1248,10 @@ margin: 0 auto 38px;
 .trust-grid {
   gap: 22px;
 }
-
+#trust {
+  background: linear-gradient(135deg, #1e3a8a, #4f8cff);
+  color: white;
+}
 .trust-card {
   background: linear-gradient(180deg, #ffffff 0%, #fcfdff 100%);
   border: 1px solid rgba(17, 24, 39, 0.06);
@@ -1293,6 +1296,7 @@ margin: 0 auto 38px;
   letter-spacing: 0.22em;
   position: relative;
   display: inline-block;
+  color: white;
 }
 #trust .section-head {
   text-align: center;
@@ -1301,6 +1305,7 @@ margin: 0 auto 38px;
 }
 #trust .section-head h2 {
   font-size: clamp(2rem, 3vw, 2.6rem);
+  color: white;
 }
 #trust .section-label::after {
   content: "";
@@ -1319,32 +1324,36 @@ margin: 0 auto 38px;
   align-items: start;
 }
 
+#shariah {
+  background: #f8fafc;
+  color: #0f172a;
+}
+
 #shariah .section-label {
-  color: rgba(255, 255, 255, 0.85);
+  color: #246bdb;
   font-size: 2.05rem;
   font-weight: 800;
   letter-spacing: 0.14em;
 }
 
 #shariah .section-label::after {
-  background: linear-gradient(90deg, #ffffff, rgba(255,255,255,0.55));
+  background: linear-gradient(90deg, #14b8e6, #246bdb, #8a63f7);
 }
 
-#shariah h2 {
-  color: #ffffff;
+#shariah h2,
+#shariah h3 {
+  color: #111827;
 }
 
 #shariah p {
-  color: rgba(255, 255, 255, 0.88);
+  color: #64748b;
 }
+
 .sharia-image-wrap {
   margin-top: 24px;
   width: 100%;
   border-radius: 24px;
   overflow: hidden;
-  /* background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.14);
-  box-shadow: 0 14px 34px rgba(10, 20, 40, 0.12); */
   min-height: 320px;
 }
 
@@ -1355,10 +1364,7 @@ margin: 0 auto 38px;
   object-fit: cover;
   object-position: top;
   display: block;
-
   border-radius: 24px;
-
-  /* blend effect */
   opacity: 0.95;
   mix-blend-mode: normal;
 }
@@ -1367,13 +1373,19 @@ margin: 0 auto 38px;
 #shariah .quote-box {
   margin: 24px 0 0;
   padding: 22px 24px;
-  border-left: 4px solid rgba(255,255,255,0.9);
+  border-left: 4px solid #246bdb;
   border-radius: 0 16px 16px 0;
-  background: rgba(255,255,255,0.10);
-  color: #ffffff;
+  background: #ffffff;
+  color: #111827;
   font-family: var(--display);
   font-size: 1.05rem;
   line-height: 1.7;
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.06);
+}
+
+#shariah .quote-box p,
+#shariah blockquote {
+  color: #111827;
 }
 
 .stack-col {
@@ -1383,46 +1395,78 @@ margin: 0 auto 38px;
 
 .term-card,
 #shariah .term-card {
-  background: rgba(255,255,255,0.10);
-  border: 1px solid rgba(255,255,255,0.16);
+  position: relative;
+  background: linear-gradient(180deg, #ffffff 0%, #f9fbff 100%);
+  border: 1px solid rgba(36, 107, 219, 0.08);
   border-radius: 24px;
   padding: 26px 24px;
-  box-shadow: 0 14px 34px rgba(10, 20, 40, 0.12);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
+  color: #0f172a;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+/* subtle gradient glow layer */
+.term-card::before,
+#shariah .term-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, rgba(36,107,219,0.08), rgba(138,99,247,0.06));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.term-card:hover::before,
+#shariah .term-card:hover::before {
+  opacity: 1;
 }
 
 .term-card:hover,
 #shariah .term-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 22px 42px rgba(10, 20, 40, 0.18);
-  border-color: rgba(255,255,255,0.28);
-  background: rgba(255,255,255,0.14);
+  box-shadow: 0 22px 45px rgba(36, 107, 219, 0.12);
+  border-color: rgba(36, 107, 219, 0.14);
 }
 
+/* subtle left accent */
+.term-card::after,
+#shariah .term-card::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 18px;
+  bottom: 18px;
+  width: 3px;
+  border-radius: 2px;
+  background: linear-gradient(180deg, #14b8e6, #246bdb, #8a63f7);
+  opacity: 0.6;
+}
+
+/* typography */
 .term-card h3,
 #shariah .term-card h3 {
-  color: #ffffff;
-  font-size: 1.75rem;
-  margin-bottom: 8px;
+  color: #111827;
+  font-size: 1.6rem;
+  margin-bottom: 6px;
 }
 
 .term-sub,
 #shariah .term-sub {
-  color: rgba(255,255,255,0.75);
-  font-size: 0.74rem;
+  color: #246bdb;
+  font-size: 0.72rem;
   font-weight: 800;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   margin-bottom: 12px;
 }
 
 .term-card p,
 #shariah .term-card p {
-  color: rgba(255,255,255,0.88);
+  color: #667085;
   line-height: 1.75;
 }
+
 /* SHARIA ADVISOR CARD */
 .sharia-advisor-card {
   margin-top: 24px;
@@ -1445,7 +1489,6 @@ margin: 0 auto 38px;
 .sharia-advisor {
   display: contents;
 }
-
 
 .sharia-advisor-photo-wrap {
   width: 210px;
@@ -1475,7 +1518,7 @@ margin: 0 auto 38px;
 }
 
 .sharia-advisor-label {
-  color: #246bdb;
+  color: #667085;
   font-size: 0.78rem;
   font-weight: 800;
   letter-spacing: 0.08em;
@@ -1489,13 +1532,11 @@ margin: 0 auto 38px;
   margin-bottom: 8px;
 }
 
-
 .sharia-advisor-role {
   color: #1d4ed8 !important;
   font-weight: 700;
   margin-bottom: 4px;
 }
-
 
 .sharia-advisor-org {
   color: #4b5563 !important;
@@ -1518,7 +1559,7 @@ margin: 0 auto 38px;
   font-size: 0.74rem;
   font-weight: 700;
   color: #246bdb;
-  background: #eef2ff;
+  background: #eef4ff;
   border: 1px solid rgba(36, 107, 219, 0.12);
 }
 
@@ -1529,6 +1570,7 @@ margin: 0 auto 38px;
 .sharia-advisor-card .sharia-advisor-org {
   color: #4b5563 !important;
 }
+
 /* SHARIA CERTIFICATE BLOCK */
 .sharia-certificate-block {
   margin-top: 34px;
@@ -1620,7 +1662,7 @@ margin: 0 auto 38px;
 
 /* ROADMAP SECTION */
 #roadmap {
-  background: #ffffff;
+  background: #f8fafc;
   color: #111827;
 }
 
