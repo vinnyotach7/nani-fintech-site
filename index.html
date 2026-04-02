@@ -215,8 +215,7 @@
               <span class="section-label">What We Do</span>
               <!-- <h2>What Nani does clearly.</h2> -->
               <p>
-              Nani Fintech Plus is a facilitator platform. We connect eligible users and businesses with selected ethical, asset-backed opportunities offered through vetted partners.
-    We do not act as a bank, lender, or investment manager.
+              Nani is a technology platform that provides access to ethical, asset-backed financial opportunities.
               </p>
             </div>
     
@@ -392,9 +391,32 @@
             Get Started
           </a>
     
-          <p class="trust-cta-note">
-            Capital is at risk and returns are not guaranteed. All opportunities are provided and managed by independent third-party partners.
-          </p>
+        <p class="trust-cta-note">
+  <strong>Risk Notice:</strong> Your capital is at risk. Returns are not guaranteed.
+  <a href="javascript:void(0);" onclick="toggleRisk(event)" style="text-decoration: underline; margin-left:6px;">
+    Read full risk disclosure
+  </a>
+</p>
+
+<div id="full-risk" style="display:none; margin-top:10px; font-size:13px; opacity:0.8; line-height:1.6;">
+  Funds are not protected by the Financial Services Compensation Scheme (FSCS). 
+  Funds may be held in segregated accounts but are not FCA CASS-regulated client money accounts. 
+  You may not have access to the Financial Ombudsman Service (FOS). 
+  Seek independent advice before participating.
+</div>
+
+<script>
+function toggleRisk(event) {
+  event.preventDefault(); // 🚨 stops the jump to top
+
+  var x = document.getElementById("full-risk");
+  if (x.style.display === "none") {
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
+  }
+}
+</script>
         </div>
       </div>
     </section>
@@ -840,8 +862,8 @@
 
     <!-- ✅ STRONGER LEGAL POSITIONING -->
     <p>
-    Nani Fintech Plus Ltd is not a bank and does not provide regulated investment services at this stage. Wallet and e-money services are not currently live and may be introduced in the future through authorised partners.
-    </p>
+    Nani Fintech Plus Ltd is Registered in England & Wales, Company No. 16630423. 203–205 The Vale Business Center, The Vale, Acton, W3 7QS, London.
+Not FCA-authorised or regulated. Not a regulated activity under FSMA 2000. Capital at risk. Not FSCS-protected. Not financial advice. For sophisticated and HNW investors only.
   </div>
 </footer>
 

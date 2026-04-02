@@ -4181,3 +4181,10 @@ canvas {
     height: 46px;
   }
 }
+.trust-cta-note {
+  font-size: 13px;
+  opacity: 0.85;
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto;
+}
