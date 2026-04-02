@@ -1,3 +1,27 @@
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+// ==============================
+// FIREBASE SETUP
+// ==============================
+const firebaseConfig = {
+  apiKey: "AIzaSyCnO3fJXfGF9qODEixY-oVvJ3-0TIsb45M",
+  authDomain: "nani-fintech-admin.firebaseapp.com",
+  projectId: "nani-fintech-admin",
+  storageBucket: "nani-fintech-admin.firebasestorage.app",
+  messagingSenderId: "910565960491",
+  appId: "1:910565960491:web:135aa60b4f3ac623f0336e",
+  measurementId: "G-M9L17B9GEW"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
 // ==============================
 // MOBILE MENU
 // ==============================
@@ -102,7 +126,6 @@ const successMessage = document.querySelector(".interest-success");
 const formTypeInput = document.getElementById("formType");
 const interestPopupModal = document.getElementById("interestPopupModal");
 const interestPopupClose = document.getElementById("interestPopupClose");
-const openInterestPopupButtons = document.querySelectorAll(".open-interest-popup");
 
 const panelMap = {
   generalPanel: "general",
@@ -307,6 +330,8 @@ function buildPayload(form, formType) {
     country: "",
     message: "",
     formType,
+    source: "website_popup",
+    createdFromDomain: window.location.hostname,
   };
 
   if (formType === "general") {
@@ -518,7 +543,8 @@ if (interestForm && successMessage) {
     }
 
     const formType = formTypeInput?.value || "general";
-    const submitBtn = activePanel?.querySelector('button[type="submit"]') ||
+    const submitBtn =
+      activePanel?.querySelector('button[type="submit"]') ||
       interestForm.querySelector('button[type="submit"]');
 
     successMessage.textContent = "";
@@ -543,36 +569,21 @@ if (interestForm && successMessage) {
     }
 
     try {
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
+      await addDoc(collection(db, "contact_submissions"), {
+        ...payload,
+        createdAt: serverTimestamp(),
       });
 
-      let result = {};
-      try {
-        result = await response.json();
-      } catch {
-        result = {};
-      }
+      successMessage.textContent = "Thank you. Your submission has been received.";
+      resetInterestFormToDefault();
 
-      if (response.ok) {
-        successMessage.textContent = "Thank you. Your submission has been received.";
-        resetInterestFormToDefault();
-
-        setTimeout(() => {
-          closeInterestPopup();
-        }, 1200);
-      } else {
-        successMessage.textContent =
-          result.message || "Submission failed. Please try again.";
-      }
+      setTimeout(() => {
+        closeInterestPopup();
+      }, 1200);
     } catch (error) {
-      successMessage.textContent =
-        "Could not connect to the form service. Please try again.";
       console.error("Interest form submit error:", error);
+      successMessage.textContent =
+        "Submission failed. Please try again.";
     } finally {
       if (submitBtn) {
         submitBtn.disabled = false;
@@ -591,13 +602,11 @@ window.addEventListener("load", () => {
 
   if (!popup) return;
 
-  // Show popup every time
   setTimeout(() => {
     popup.classList.add("show");
     popup.setAttribute("aria-hidden", "false");
   }, 1400);
 
-  // Close button
   if (closeBtn) {
     closeBtn.addEventListener("click", () => {
       popup.classList.remove("show");
@@ -605,7 +614,6 @@ window.addEventListener("load", () => {
     });
   }
 
-  // Click outside closes
   popup.addEventListener("click", (e) => {
     if (e.target === popup) {
       popup.classList.remove("show");
