@@ -332,6 +332,7 @@ function buildPayload(form, formType) {
     formType,
     source: "website_popup",
     createdFromDomain: window.location.hostname,
+    status: "new",
   };
 
   if (formType === "general") {
