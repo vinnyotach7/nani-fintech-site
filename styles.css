@@ -2794,6 +2794,10 @@ body.modal-open {
   font-size: 1.5rem;
   margin-top: 26px;
 }
+.legal-card a {
+  color: #4f46e5;
+  font-weight: 500;
+}
 
 /* ANIMATIONS */
 .reveal {
