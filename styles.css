@@ -689,8 +689,8 @@ p {
 
 /* ABOUT SECTION */
 .about-section {
-  padding-top: 72px;
-  padding-bottom: 84px;
+  padding-top: 40px;
+  padding-bottom: 65px;
 }
 
 .about-head {
@@ -802,8 +802,8 @@ p {
 
 /* OUR ROLE SECTION */
 .role-section {
-  padding-top: 78px;
-  padding-bottom: 90px;
+  padding-top: 50px;
+  padding-bottom: 70px;
   background: linear-gradient(135deg, #18b7df 0%, #246bdb 50%, #6c63ff 100%);
 }
 
@@ -919,6 +919,8 @@ p {
 /* ETHICAL OPPORTUNITIES SECTION */
 #opportunities {
   background: linear-gradient(to bottom, #ffffff, #f8fafc);
+  padding-top: 40px;   /* 👈 reduce this */
+  padding-bottom: 80px;
 }
 
 #opportunities .section-head {
@@ -1169,6 +1171,8 @@ p {
 #how-it-works {
   background: #f8fafc;
   color: #0f172a;
+  padding-top: 40px;   /* 👈 reduce this */
+  padding-bottom: 60px;
 }
 
 #how-it-works .section-head {
@@ -1252,6 +1256,8 @@ margin: 0 auto 38px;
 #trust {
   background: linear-gradient(135deg, #1e3a8a, #4f8cff);
   color: white;
+  padding-top: 40px;   /* 👈 reduce this */
+  padding-bottom: 80px;
 }
 .trust-card {
   background: linear-gradient(180deg, #ffffff 0%, #fcfdff 100%);
@@ -1328,6 +1334,8 @@ margin: 0 auto 38px;
 #shariah {
   background: #f8fafc;
   color: #0f172a;
+  padding-top: 40px;   /* 👈 reduce this */
+  padding-bottom: 70px;
 }
 
 #shariah .section-label {
@@ -1600,8 +1608,8 @@ margin: 0 auto 38px;
 #roadmap {
   background: #f8fafc;
   color: #111827;
-  padding-top: 30px; /* 👈 ADD THIS */
-  padding-bottom: 80px; /* optional, keeps bottom balanced */
+  padding-top: 20px; /* 👈 ADD THIS */
+  padding-bottom: 70px; /* optional, keeps bottom balanced */
 }
 
 #roadmap .section-head {
@@ -1769,7 +1777,7 @@ margin: 0 auto 38px;
 .team-section {
   background: linear-gradient(135deg, #18b7df 0%, #246bdb 50%, #6c63ff 100%);
   color: #ffffff;
-  padding-top: 78px;
+  padding-top: 55px;
   padding-bottom: 90px;
 }
 
