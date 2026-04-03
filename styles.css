@@ -365,7 +365,8 @@ p {
 
 /* HERO */
 .hero {
-  min-height: calc(100vh - 136px);
+   min-height: 70vh;
+  padding: 60px 0 50px;
   display: flex;
   align-items: center;
   background:
@@ -421,7 +422,7 @@ p {
   z-index: 1;
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(520px, 0.95fr);
-  gap: 64px;
+  gap: 40px;
   align-items: center;
 }
 
@@ -509,7 +510,7 @@ p {
 .hero h1 {
   font-size: clamp(2.4rem, 4.8vw, 4.2rem);
   line-height: 1.02;
-  margin-bottom: 18px;
+  margin-bottom: 12px;
   color: #fff;
   max-width: 700px;
 }
@@ -524,7 +525,7 @@ p {
   color: rgba(255,255,255,0.92);
   font-size: 1.22rem;
   max-width: 720px;
-  margin-bottom: 14px;
+  margin-bottom: 10px;
 }
 
 .hero-sub {
@@ -537,7 +538,7 @@ p {
   display: flex;
   gap: 14px;
   flex-wrap: wrap;
-  margin-top: 30px;
+  margin-top: 20px;
 }
 
 .glass-card {
@@ -1599,10 +1600,12 @@ margin: 0 auto 38px;
 #roadmap {
   background: #f8fafc;
   color: #111827;
+  padding-top: 30px; /* 👈 ADD THIS */
+  padding-bottom: 80px; /* optional, keeps bottom balanced */
 }
 
 #roadmap .section-head {
-  margin-bottom: 34px;
+  margin-bottom: 24px;
 }
 
 #roadmap .section-label {
@@ -1772,6 +1775,7 @@ margin: 0 auto 38px;
 
 .team-section .section-head {
   margin-bottom: 34px;
+  text-align: center;
 }
 
 .team-section .section-label {
@@ -1787,7 +1791,9 @@ margin: 0 auto 38px;
 }
 
 .team-section .section-label::after {
-  background: linear-gradient(90deg, #ffffff, rgba(255,255,255,0.5));
+  display: block;
+  margin: 10px auto 0;
+   background: linear-gradient(90deg, #ffffff, rgba(255,255,255,0.5));
 }
 
 .team-section h2 {
@@ -1801,10 +1807,17 @@ margin: 0 auto 38px;
 .team-section .section-head p {
   color: rgba(255,255,255,0.88);
   max-width: 760px;
+  margin: 0 auto;
 }
 
 .team-section .card-grid {
   gap: 22px;
+}
+.team-section .section-head {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 600px;
 }
 
 .profile-card {
