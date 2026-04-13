@@ -987,7 +987,53 @@ p {
   overflow: hidden;
   transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
 }
+.opportunities-grid .product-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 30px 24px 26px;
+  border-radius: 28px;
+}
 
+.opportunities-grid .product-card h3 {
+  margin-top: 20px;
+  margin-bottom: 16px;
+  line-height: 1.15;
+}
+
+.opportunities-grid .product-summary {
+  margin-bottom: 18px;
+  line-height: 1.7;
+  font-size: 15px;
+  min-height: 110px;
+}
+
+.opportunities-grid .meta-list {
+  margin-top: 6px;
+  margin-bottom: 22px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.opportunities-grid .product-link {
+  margin-top: auto;
+  align-self: flex-start;
+}
+
+.opportunities-grid .meta-list div {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 10px;
+}
+
+.opportunities-grid .meta-list span {
+  opacity: 0.9;
+}
+
+.opportunities-grid .meta-list strong {
+  text-align: right;
+}
 .product-card::before {
   content: "";
   position: absolute;
