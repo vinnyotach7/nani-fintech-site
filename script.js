@@ -242,17 +242,9 @@ function setPrefilledInterest(prefillInterest, formType = "general") {
     investorInterestSelect.value = hasMatch ? prefillInterest : "";
   }
 
-  if (generalMessage) {
-    generalMessage.value = prefillInterest ? `I'm interested in: ${prefillInterest}` : "";
-  }
-
-  if (investorMessage) {
-    investorMessage.value = prefillInterest ? `I'm interested in: ${prefillInterest}` : "";
-  }
-
-  if (businessMessage) {
-    businessMessage.value = prefillInterest ? `I'm interested in: ${prefillInterest}` : "";
-  }
+  if (generalMessage) generalMessage.value = "";
+  if (investorMessage) investorMessage.value = "";
+  if (businessMessage) businessMessage.value = "";
 
   if (formTypeInput) {
     formTypeInput.value = formType;
