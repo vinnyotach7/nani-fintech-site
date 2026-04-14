@@ -48,12 +48,17 @@ if (menuToggle && mobileMenu) {
 document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
   anchor.addEventListener("click", function (e) {
     const href = this.getAttribute("href");
+
     if (!href || href === "#") return;
 
     const target = document.querySelector(href);
+
     if (target) {
       e.preventDefault();
-      target.scrollIntoView({ behavior: "smooth", block: "start" });
+      target.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
     }
   });
 });
@@ -499,6 +504,12 @@ if (interestPopupModal) {
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") {
     closeInterestPopup();
+
+    const naniPopup = document.getElementById("naniPopup");
+    if (naniPopup?.classList.contains("show")) {
+      naniPopup.classList.remove("show");
+      naniPopup.setAttribute("aria-hidden", "true");
+    }
   }
 });
 
@@ -575,8 +586,7 @@ if (interestForm && successMessage) {
       }, 1200);
     } catch (error) {
       console.error("Interest form submit error:", error);
-      successMessage.textContent =
-        "Submission failed. Please try again.";
+      successMessage.textContent = "Submission failed. Please try again.";
     } finally {
       if (submitBtn) {
         submitBtn.disabled = false;
@@ -592,25 +602,38 @@ if (interestForm && successMessage) {
 window.addEventListener("load", () => {
   const popup = document.getElementById("naniPopup");
   const closeBtn = document.getElementById("naniPopupClose");
+  const interestBtn = document.getElementById("naniPopupInterest");
 
   if (!popup) return;
 
-  setTimeout(() => {
-    popup.classList.add("show");
-    popup.setAttribute("aria-hidden", "false");
-  }, 1400);
+  const hasClosed = localStorage.getItem("naniPopupClosed");
+
+  function openPopup() {
+    if (!hasClosed) {
+      popup.classList.add("show");
+      popup.setAttribute("aria-hidden", "false");
+    }
+  }
+
+  function closePopup() {
+    popup.classList.remove("show");
+    popup.setAttribute("aria-hidden", "true");
+    localStorage.setItem("naniPopupClosed", "true");
+  }
+
+  setTimeout(openPopup, 1400);
 
   if (closeBtn) {
-    closeBtn.addEventListener("click", () => {
-      popup.classList.remove("show");
-      popup.setAttribute("aria-hidden", "true");
-    });
+    closeBtn.addEventListener("click", closePopup);
   }
 
   popup.addEventListener("click", (e) => {
     if (e.target === popup) {
-      popup.classList.remove("show");
-      popup.setAttribute("aria-hidden", "true");
+      closePopup();
     }
   });
+
+  if (interestBtn) {
+    interestBtn.addEventListener("click", closePopup);
+  }
 });
