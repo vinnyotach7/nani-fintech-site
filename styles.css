@@ -365,8 +365,8 @@ p {
 
 /* HERO */
 .hero {
-   min-height: 70vh;
-  padding: 60px 0 50px;
+  min-height: auto;
+  padding: 95px 0 70px;
   display: flex;
   align-items: center;
   background:
@@ -538,9 +538,12 @@ p {
   display: flex;
   gap: 14px;
   flex-wrap: wrap;
-  margin-top: 20px;
+  margin-top: 28px;
+  margin-bottom: 0;
 }
-
+.hero-copy {
+  padding-top: 0;
+}
 .glass-card {
   background: rgba(255,255,255,0.12);
   border: 1px solid rgba(255,255,255,0.18);
@@ -3084,7 +3087,7 @@ body.modal-open {
   }
 }
 
-@media (max-width: 980px) {
+@media (max-width: 780px) {
   .hero-grid,
   .split-grid,
   .three-up,
@@ -3106,6 +3109,7 @@ body.modal-open {
   .hero-visual {
     height: auto !important;
     min-height: 0 !important;
+    margin-top: 24px;
   }
 
   .section-pad {
@@ -3172,10 +3176,10 @@ body.modal-open {
     display: block;
   }
 
-  .hero {
+  /* .hero {
     min-height: auto;
     padding: 44px 0;
-  }
+  } */
 
   .hero h1 {
     font-size: clamp(2.4rem, 10vw, 4rem);
@@ -4457,4 +4461,24 @@ canvas {
   text-align: center;
   max-width: 600px;
   margin: 0 auto;
+}
+/* FORCE DESKTOP HERO IMAGE TO STAY ON THE RIGHT */
+@media (min-width: 981px) {
+  .hero-grid {
+    display: grid !important;
+    grid-template-columns: minmax(420px, 0.9fr) minmax(420px, 1fr) !important;
+    align-items: center !important;
+    gap: 54px !important;
+  }
+
+  .hero-copy {
+    max-width: 620px !important;
+  }
+
+  .hero-visual {
+    display: flex !important;
+    justify-self: end !important;
+    max-width: 560px !important;
+    margin-top: 0 !important;
+  }
 }
